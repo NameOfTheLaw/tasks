@@ -1,10 +1,10 @@
-package com.github.leo_scream.game;
+package com.github.leo_scream.tasks;
 
 import java.util.Iterator;
 import java.util.List;
 
 /**
- * Specification: src/test/kotlin/com/github/leo_scream/game/RangeSpec.kt
+ * Specification: src/test/kotlin/com/github/leo_scream/tasks/RangeSpec.kt
  */
 public interface Range {
 
