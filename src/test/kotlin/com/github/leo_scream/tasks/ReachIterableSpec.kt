@@ -12,7 +12,7 @@ import kotlin.test.*
  * @author Denis Verkhoturov, mod.satyr@gmail.com
  */
 object ReachIterableSpec : Spek({
-    describe("a reach iterable") {
+    describe("reach iterable") {
         on("initialization") {
             it("should throw NullPointerException if instantiated from null instead of list") {
                 assertFailsWith<NullPointerException> { ReachIterable.from<Nothing>(null) }
@@ -31,7 +31,7 @@ object ReachIterableSpec : Spek({
                     assertTrue { ReachIterable.from(elements).forNext {} }
                 }
 
-                it("should iterate over every single element before return false") {
+                it("should iterate over every single element before returning false") {
                     var hasNext = true
                     val iterable = ReachIterable.from(elements)
                     while (hasNext) {
@@ -55,22 +55,22 @@ object ReachIterableSpec : Spek({
             }
 
             on("filtering") {
-                it("should fails with NullPointerException when predicate is null") {
+                it("should fail with NullPointerException when predicate is null") {
                     assertFailsWith<NullPointerException> { ReachIterable.from(elements).filter(null) }
                 }
 
-                it("should return empty iterable if no elements satisfying predicate") {
+                it("should return empty iterable if no elements satisfy predicate") {
                     assertFalse { ReachIterable.from(elements).filter { false }.forNext {} }
                 }
 
-                it("should pass only elements satisfying predicate") {
+                it("should pass only elements that satisfy predicate") {
                     ReachIterable.from(elements).filter { word -> word.startsWith("a") }
                             .forNext { assertEquals("airplane", it) }
                 }
             }
 
             on("mapping") {
-                it("should fails with NullPointerException when mapper function is null") {
+                it("should fail with NullPointerException when mapper function is null") {
                     assertFailsWith<NullPointerException> { ReachIterable.from(elements).map<Nothing>(null) }
                 }
 
@@ -82,7 +82,7 @@ object ReachIterableSpec : Spek({
                     assertEquals(expected, actual)
                 }
 
-                it("should works fine with function returning null as result") {
+                it("should work fine with function that returns null as result") {
                     val expected = Collections.nCopies(elements.size, null)
                     val mapped = ReachIterable.from(elements).map { null }
                     val actual = mutableListOf<Nothing?>()
@@ -114,7 +114,7 @@ object ReachIterableSpec : Spek({
                     )
                 }
 
-                it("should works fine with mapper function returns less elements than was in origin") {
+                it("should work fine with mapper function that returns less elements than was initially") {
                     val mapped = ReachIterable.from(elements)
                                               .flatMap {
                                                   word -> (0..word.length - 1).filter { it > 5 }
@@ -125,7 +125,7 @@ object ReachIterableSpec : Spek({
                     assertEquals(listOf('n', 'e'), actual)
                 }
 
-                it("should process one element per ") {
+                it("should process one element per forNext call") {
                     val mapped = ReachIterable.from(elements)
                                               .flatMap {  word -> (0..word.length - 1).map { word[it] } }
                     val actual = mutableListOf<Char>()
@@ -157,7 +157,7 @@ object ReachIterableSpec : Spek({
                     assertFalse { needle.isPresent }
                 }
 
-                it("should return optional containing needle if element is present in origin list") {
+                it("should return optional containing needle if element is present in original list") {
                     val needle = ReachIterable.from(elements).firstMatch { it == "camp" }
                     assertEquals("camp", needle.get())
                 }
@@ -169,49 +169,49 @@ object ReachIterableSpec : Spek({
                 }
             }
 
-            on("checking is any match") {
+            on("checking if any match") {
                 it ("should throw NullPointerException if predicate is null") {
                     assertFailsWith<NullPointerException> { ReachIterable.from(elements).anyMatch(null) }
                 }
 
-                it ("should be true if given elements contains any element which satisfies predicate") {
+                it ("should be true if given elements contain any element that satisfies predicate") {
                     val iterable = ReachIterable.from(elements)
                     assertTrue { iterable.anyMatch { it.startsWith("a") } }
                 }
 
-                it ("should be false if given elements contains no element which satisfies predicate") {
+                it ("should be false if given elements contain no element that satisfies predicate") {
                     val iterable = ReachIterable.from(elements)
                     assertFalse { iterable.anyMatch { it.startsWith("x") } }
                 }
             }
 
-            on("checking is all match") {
+            on("checking if all match") {
                 it ("should throw NullPointerException if predicate is null") {
                     assertFailsWith<NullPointerException> { ReachIterable.from(elements).allMatch(null) }
                 }
 
-                it ("should be true if all the elements satisfies predicate") {
+                it ("should be true if all elements satisfy predicate") {
                     val iterable = ReachIterable.from(elements)
                     assertTrue { iterable.allMatch { it.length < 42 } }
                 }
 
-                it ("should be false if any element do not satisfy predicate") {
+                it ("should be false if any element does not satisfy predicate") {
                     val iterable = ReachIterable.from(elements)
                     assertFalse { iterable.allMatch { it.startsWith("x") } }
                 }
             }
 
-            on("checking is none match") {
+            on("checking if none match") {
                 it ("should throw NullPointerException if predicate is null") {
                     assertFailsWith<NullPointerException> { ReachIterable.from(elements).noneMatch(null) }
                 }
 
-                it ("should be true if no one element satisfy predicate") {
+                it ("should be true if no element satisfies predicate") {
                     val iterable = ReachIterable.from(elements)
                     assertTrue { iterable.noneMatch { it.startsWith("x") } }
                 }
 
-                it ("should be false if any element satisfy predicate") {
+                it ("should be false if any element satisfies predicate") {
                     val iterable = ReachIterable.from(elements)
                     assertFalse { iterable.noneMatch { it.startsWith("a") } }
                 }

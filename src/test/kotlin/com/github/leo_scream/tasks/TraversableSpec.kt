@@ -39,12 +39,12 @@ object TraversableSpec : Spek({
                     }
                 }
 
-                it("should pass only elements satisfying predicate") {
+                it("should pass only elements that satisfy predicate") {
                     val filtered = traversable.filter({ word -> word.startsWith("a") })
                     assertEquals(listOf("airplane"), filtered.toList())
                 }
 
-                it("should return empty traversable if no elements satisfying predicate") {
+                it("should return empty traversable if no elements satisfy predicate") {
                     val filtered = traversable.filter({ false })
                     assertEquals(emptyList<String>(), filtered.toList())
                 }
@@ -62,7 +62,7 @@ object TraversableSpec : Spek({
                     assertEquals(listOf(3, 5, 4, 8), mapped.toList())
                 }
 
-                it("should works fine with mapper function which returns null as result") {
+                it("should works fine with mapper function that returns null as result") {
                     val mapped = traversable.map({ null })
                     assertEquals(listOf(null, null, null, null), mapped.toList())
                 }
@@ -88,7 +88,7 @@ object TraversableSpec : Spek({
                     )
                 }
 
-                it("should works fine with mapper function which returns less elements than was in origin") {
+                it("should work fine with mapper function that returns less elements than was initially") {
                     val mapped = traversable.flatMap({
                         word -> (0..word.length - 1).filter { it > 5 }
                                                     .map { word[it] }

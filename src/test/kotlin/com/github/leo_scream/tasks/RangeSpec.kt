@@ -16,17 +16,17 @@ object RangeSpec : Spek({
     val greatestRangeLowerBound = 48
     val greatestRangeUpperBound = 53
 
-    describe("a range") {
+    describe("range") {
         on("initialization") {
-            it("should throw IllegalArgumentException if lower bound greater than upper one") {
+            it("should throw IllegalArgumentException if lower bound is greater than upper one") {
                 assertFailsWith<IllegalArgumentException> { Range.within(smallestRangeUpperBound, smallestRangeLowerBound) }
             }
 
-            it("should be able to instantiate range within 1 element if lower bound equals to upper one") {
+            it("should be able to instantiate range of one element if lower bound equals upper one") {
                 assertTrue { Range.within(smallestRangeLowerBound, smallestRangeLowerBound).contains(smallestRangeLowerBound) }
             }
 
-            it("should be able to has Integer.MIN_VALUE as lower bound and Integer.MAX_VALUE as upper bound") {
+            it("should be able to have Integer.MIN_VALUE as lower bound and Integer.MAX_VALUE as upper bound") {
                 val range = Range.within(Integer.MIN_VALUE, Integer.MAX_VALUE)
                 assertEquals(range.lowerBound(), Integer.MIN_VALUE)
                 assertEquals(range.upperBound(), Integer.MAX_VALUE)
@@ -39,47 +39,47 @@ object RangeSpec : Spek({
             val greatest = Range.within(greatestRangeLowerBound, greatestRangeUpperBound)
             val overlapping = Range.within(smallestRangeUpperBound, greatestRangeLowerBound)
 
-            it("should contains lower and upper bounds as an element") {
+            it("should contain lower and upper bounds as an element") {
                 assertTrue { smallest.contains(smallestRangeLowerBound) }
                 assertTrue { smallest.contains(smallestRangeUpperBound) }
             }
 
-            it("should not contains element if it is out within bounds") {
+            it("should not contain element if it is out of bounds") {
                 assertFalse { overlapping.contains(smallestRangeLowerBound) }
                 assertFalse { overlapping.contains(greatestRangeUpperBound) }
             }
 
-            on("sequencing") {
-                it("should be before another if it's upper bound is less-than lower bound within another range") {
+            on("ordering") {
+                it("should be before another if its upper bound is less than lower bound of another range") {
                     assertTrue { smallest.isBefore(greatest) }
                 }
 
-                it("should not be before another if it's upper bound is greater-than or equals to lower bound within another range") {
+                it("should not be before another if its upper bound is equal to or greater than lower bound of another range") {
                     assertFalse { greatest.isBefore(smallest) }
                 }
 
-                it("should not be before another if ranges has overlapping elements") {
+                it("should not be before another if ranges have overlapping elements") {
                     assertFalse { overlapping.isBefore(greatest) }
                 }
 
-                it("should be after another if it's lower bound is greater-than upper bound within another range") {
+                it("should be after another if its lower bound is greater than upper bound of another range") {
                     assertTrue { greatest.isAfter(smallest) }
                 }
 
-                it("should not be after another if it's lower bound is less-than or equals to upper bound within another range") {
+                it("should not be after another if its lower bound is equal to or less than upper bound of another range") {
                     assertFalse { smallest.isAfter(greatest) }
                 }
 
-                it("should not be after another if ranges has overlapping elements") {
+                it("should not be after another if ranges have overlapping elements") {
                     assertFalse { greatest.isAfter(overlapping) }
                 }
 
-                it("should be concurrent if ranges has common elements") {
+                it("should be concurrent if ranges have common elements") {
                     assertTrue { smallest.isConcurrent(overlapping) }
                     assertTrue { greatest.isConcurrent(overlapping) }
                 }
 
-                it("should not be concurrent if ranges has no common elements") {
+                it("should not be concurrent if ranges have no common elements") {
                     assertFalse { smallest.isConcurrent(greatest) }
                     assertFalse { greatest.isConcurrent(smallest) }
                 }
@@ -92,7 +92,7 @@ object RangeSpec : Spek({
             }
 
             on("viewing as a list") {
-                it("should contains every single value") {
+                it("should contain every single value") {
                     assertEquals(smallest.asList(), (smallestRangeLowerBound..smallestRangeUpperBound).toList())
                 }
             }
@@ -100,11 +100,11 @@ object RangeSpec : Spek({
             on("taking an iterator") {
                 val iterator = smallest.asIterator()
 
-                it("should has next") {
+                it("should have next") {
                     assertTrue { smallest.asIterator().hasNext() }
                 }
 
-                it("should throw NoSuchElementException if has not next value") {
+                it("should throw NoSuchElementException if has no next value") {
                     val elements = (smallestRangeLowerBound..smallestRangeUpperBound).toList()
                     while (iterator.hasNext()) {
                         assertTrue { elements.contains(iterator.next()) }
