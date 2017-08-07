@@ -32,6 +32,9 @@ junitPlatform {
             include "spek"
         }
     }
+    selectors {
+        files submittedTasks()
+    }
 }
 
 repositories {
@@ -44,4 +47,18 @@ dependencies {
     testCompile group: "org.jetbrains.kotlin", name: "kotlin-test",                version: "$kotlinVersion"
     testCompile group: "org.jetbrains.spek",   name: "spek-api",                   version: "$spekVersion"
     testCompile group: "org.jetbrains.spek",   name: "spek-junit-platform-engine", version: "$spekVersion"
+}
+
+def submittedTasks() {
+    def tasks = project.sourceSets.main.java.collect { it.getName() }
+            .collect { it.substring(0, it.indexOf(".java")) }
+    def command = 'git diff --name-only master'.execute()
+    command.waitFor()
+    def submitted = command.text.split(System.lineSeparator())
+            .findAll { it.endsWith(".java")}
+            .collect { it.substring(it.lastIndexOf(File.separator) + 1, it.lastIndexOf(".java")) }
+            .findAll { tasks.contains(it) }
+    return project.sourceSets.test.kotlin.findAll {
+        submitted.contains(it.getName().substring(0, it.getName().indexOf("Spec.kt")))
+    }
 }

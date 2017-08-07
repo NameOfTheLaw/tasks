@@ -13,5 +13,6 @@ cache:
         - $HOME/.gradle/caches
         - $HOME/.gradle/wrapper
 branches:
-  except:
+  only:
     - master
+    - solutions
