@@ -33,7 +33,7 @@ junitPlatform {
         }
     }
     selectors {
-        files submittedTasks()
+        classes submittedTasks()
     }
 }
 
@@ -58,7 +58,8 @@ def submittedTasks() {
             .findAll { it.endsWith(".java")}
             .collect { it.substring(it.lastIndexOf(File.separator) + 1, it.lastIndexOf(".java")) }
             .findAll { tasks.contains(it) }
-    return project.sourceSets.test.kotlin.findAll {
-        submitted.contains(it.getName().substring(0, it.getName().indexOf("Spec.kt")))
-    }
+    return project.sourceSets.test.kotlin.collect { it.getName().substring(0, it.getName().indexOf("Spec.kt")) }
+            .findAll { submitted.contains(it) }
+            .collect { it + "Spec.kt" }
+            .collect { [group, rootProject.name, it].join(".") }.toArray(new String[0])
 }
