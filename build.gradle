@@ -51,15 +51,17 @@ dependencies {
 
 def submittedTasks() {
     def tasks = project.sourceSets.main.java.collect { it.getName() }
-            .collect { it.substring(0, it.indexOf(".java")) }
+                                            .collect { it.substring(0, it.indexOf(".java")) }
     def command = 'git diff --name-only master'.execute()
     command.waitFor()
     def submitted = command.text.split(System.lineSeparator())
-            .findAll { it.endsWith(".java")}
-            .collect { it.substring(it.lastIndexOf(File.separator) + 1, it.lastIndexOf(".java")) }
-            .findAll { tasks.contains(it) }
-    return project.sourceSets.test.kotlin.collect { it.getName().substring(0, it.getName().indexOf("Spec.kt")) }
-            .findAll { submitted.contains(it) }
-            .collect { it + "Spec.kt" }
-            .collect { [group, rootProject.name, it].join(".") }.toArray(new String[0])
+                                .findAll { it.endsWith(".java")}
+                                .collect { it.substring(it.lastIndexOf(File.separator) + 1, it.lastIndexOf(".java")) }
+                                .findAll { tasks.contains(it) }
+    def specs = project.sourceSets.test.kotlin.collect { it.getName().substring(0, it.getName().indexOf("Spec.kt")) }
+                                              .findAll { submitted.contains(it) }
+                                              .collect { it + "Spec.kt" }
+                                              .collect { [group, rootProject.name, it].join(".") }
+                                              .toArray(new String[0])
+    return specs
 }
