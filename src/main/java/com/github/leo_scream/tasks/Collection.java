@@ -6,35 +6,33 @@ public interface Collection<V> extends Iterable<V> {
 
     int size();
 
-    void add(V val);
+    void add(final V val);
 
-    void remove(V val);
+    void remove(final V val);
 
     void clear();
 
-    boolean contains(V val);
+    boolean contains(final V val);
+
+    void removeIf(final Predicate<V> p);
+
+    default void addAll(final Collection<V> c) {
+        throw new UnsupportedOperationException();
+    }
 
     default boolean isEmpty() {
         throw new UnsupportedOperationException();
     }
 
-    default void addAll(Collection<V> c) {
+    default boolean containsAll(final Collection<V> c) {
         throw new UnsupportedOperationException();
     }
 
-    default void removeAll(Collection<V> c) {
+    default void removeAll(final Collection<V> c) {
         throw new UnsupportedOperationException();
     }
 
-    default void removeIf(Predicate<V> p) {
-        throw new UnsupportedOperationException();
-    }
-
-    default void retainIf(Predicate<V> p) {
-        throw new UnsupportedOperationException();
-    }
-
-    default boolean containsAll(Collection<V> c) {
+    default void retainIf(final Predicate<V> p) {
         throw new UnsupportedOperationException();
     }
 }
