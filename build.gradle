@@ -60,7 +60,7 @@ def submittedTasks() {
                                 .findAll { tasks.contains(it) }
     def specs = project.sourceSets.test.kotlin.collect { it.getName().substring(0, it.getName().indexOf("Spec.kt")) }
                                               .findAll { submitted.contains(it) }
-                                              .collect { it + "Spec.kt" }
+                                              .collect { it + "Spec" }
                                               .collect { [group, rootProject.name, it].join(".") }
                                               .toArray(new String[0])
     return specs
