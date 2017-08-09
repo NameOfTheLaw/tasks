@@ -36,7 +36,7 @@ public interface Range {
         throw new UnsupportedOperationException();
     }
 
-    static Range within(final int lower, final int upper) {
+    static Range bounds(final int lower, final int upper) {
         return new Range() {
             @Override
             public int lowerBound() {

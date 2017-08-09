@@ -19,15 +19,15 @@ object RangeSpec : Spek({
     describe("range") {
         on("initialization") {
             it("should throw IllegalArgumentException if lower bound is greater than upper one") {
-                assertFailsWith<IllegalArgumentException> { Range.within(smallestRangeUpperBound, smallestRangeLowerBound) }
+                assertFailsWith<IllegalArgumentException> { Range.bounds(smallestRangeUpperBound, smallestRangeLowerBound) }
             }
 
             it("should be able to instantiate range of one element if lower bound equals upper one") {
-                assertTrue { Range.within(smallestRangeLowerBound, smallestRangeLowerBound).contains(smallestRangeLowerBound) }
+                assertTrue { Range.bounds(smallestRangeLowerBound, smallestRangeLowerBound).contains(smallestRangeLowerBound) }
             }
 
             it("should be able to have Integer.MIN_VALUE as lower bound and Integer.MAX_VALUE as upper bound") {
-                val range = Range.within(Integer.MIN_VALUE, Integer.MAX_VALUE)
+                val range = Range.bounds(Integer.MIN_VALUE, Integer.MAX_VALUE)
                 assertEquals(range.lowerBound(), Integer.MIN_VALUE)
                 assertEquals(range.upperBound(), Integer.MAX_VALUE)
             }
@@ -35,9 +35,9 @@ object RangeSpec : Spek({
         }
 
         given("initialized ranges") {
-            val smallest = Range.within(smallestRangeLowerBound, smallestRangeUpperBound)
-            val greatest = Range.within(greatestRangeLowerBound, greatestRangeUpperBound)
-            val overlapping = Range.within(smallestRangeUpperBound, greatestRangeLowerBound)
+            val smallest = Range.bounds(smallestRangeLowerBound, smallestRangeUpperBound)
+            val greatest = Range.bounds(greatestRangeLowerBound, greatestRangeUpperBound)
+            val overlapping = Range.bounds(smallestRangeUpperBound, greatestRangeLowerBound)
 
             it("should contain lower and upper bounds as an element") {
                 assertTrue { smallest.contains(smallestRangeLowerBound) }
