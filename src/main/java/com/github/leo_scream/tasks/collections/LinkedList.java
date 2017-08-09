@@ -1,4 +1,4 @@
-package com.github.leo_scream.tasks;
+package com.github.leo_scream.tasks.collections;
 
 public interface LinkedList<V> extends List<V> {
 

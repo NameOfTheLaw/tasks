@@ -1,4 +1,4 @@
-package com.github.leo_scream.tasks;
+package com.github.leo_scream.tasks.collections;
 
 import java.util.function.Predicate;
 
