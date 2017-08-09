@@ -18,11 +18,11 @@ apply plugin: "kotlin"
 apply plugin: "org.junit.platform.gradle.plugin"
 
 compileKotlin {
-    kotlinOptions.jvmTarget = targetCompatibility
+    kotlinOptions.jvmTarget = "$targetCompatibility"
 }
 
 compileTestKotlin {
-    kotlinOptions.jvmTarget = targetCompatibility
+    kotlinOptions.jvmTarget = "$targetCompatibility"
 }
 
 junitPlatform {
@@ -42,6 +42,8 @@ repositories {
 }
 
 dependencies {
+    compile group:"org.jetbrains.kotlin", name: "kotlin-stdlib-jre8", version:"$kotlinVersion"
+
     testCompile group: "org.junit.platform",   name: "junit-platform-runner",      version: "$junitPlatformVersion"
     testCompile group: "org.jetbrains.kotlin", name: "kotlin-reflect",             version: "$kotlinVersion"
     testCompile group: "org.jetbrains.kotlin", name: "kotlin-test",                version: "$kotlinVersion"
