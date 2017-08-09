@@ -2,18 +2,18 @@ package com.github.leo_scream.tasks;
 
 public interface List<V> extends Collection<V> {
 
-    void add(int i, V val);
+    void add(final int i, final V val);
 
-    void set(int i, V val);
+    void set(final int i, final V val);
 
-    V get(int i);
+    V get(final int i);
 
-    void remove(int i);
+    void remove(final int i);
 
-    List<V> subList(int from, int to);
+    List<V> subList(final int from, final int to);
 
     @Override
-    default void add(V val) {
+    default void add(final V val) {
         throw new UnsupportedOperationException();
     }
 }
