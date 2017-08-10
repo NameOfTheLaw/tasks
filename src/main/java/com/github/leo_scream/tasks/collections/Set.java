@@ -1,6 +1,6 @@
 package com.github.leo_scream.tasks.collections;
 
-public interface Set<V> extends Collection<V> {
+public interface Set<V> extends Collection<Set<V>, V> {
 
     default Set<V> union(final Set<V> other) {
         throw new UnsupportedOperationException();

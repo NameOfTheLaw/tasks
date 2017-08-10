@@ -1,20 +1,20 @@
 package com.github.leo_scream.tasks.collections;
 
-public interface LinkedList<V> extends List<V> {
+public interface LinkedList<V> extends List<LinkedList<V>, V> {
 
     V first();
 
     V last();
 
-    default void removeFirst() {
+    default LinkedList<V> removeFirst() {
         throw new UnsupportedOperationException();
     }
 
-    default void removeLast() {
+    default LinkedList<V> removeLast() {
         throw new UnsupportedOperationException();
     }
 
-    default void push(final V val) {
+    default LinkedList<V> push(final V val) {
         throw new UnsupportedOperationException();
     }
 
