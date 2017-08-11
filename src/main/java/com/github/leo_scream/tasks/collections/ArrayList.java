@@ -2,7 +2,7 @@ package com.github.leo_scream.tasks.collections;
 
 import java.util.Comparator;
 
-public interface ArrayList<V> extends List<ArrayList<V>, V> {
+public interface ArrayList<V> extends List<V> {
 
     int getCapacity();
 

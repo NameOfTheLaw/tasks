@@ -1,6 +1,6 @@
 package com.github.leo_scream.tasks.collections;
 
-public interface LinkedList<V> extends List<LinkedList<V>, V> {
+public interface LinkedList<V> extends List<V> {
 
     V first();
 
