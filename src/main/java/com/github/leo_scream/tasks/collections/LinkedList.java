@@ -12,15 +12,15 @@ public interface LinkedList<V> extends List<V> {
 
     V last();
 
-    default LinkedList<V> removeFirst() {
+    default void removeFirst() {
         throw new UnsupportedOperationException();
     }
 
-    default LinkedList<V> removeLast() {
+    default void removeLast() {
         throw new UnsupportedOperationException();
     }
 
-    default LinkedList<V> push(final V val) {
+    default void push(final V val) {
         throw new UnsupportedOperationException();
     }
 
@@ -28,7 +28,7 @@ public interface LinkedList<V> extends List<V> {
         throw new UnsupportedOperationException();
     }
 
-    default LinkedList<V> reverse() {
+    default void reverse() {
         throw new UnsupportedOperationException();
     }
 

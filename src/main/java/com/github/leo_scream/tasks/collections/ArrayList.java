@@ -11,21 +11,21 @@ public interface ArrayList<V> extends List<V> {
 
     int getCapacity();
 
-    ArrayList<V> trimToSize();
+    void trimToSize();
 
-    ArrayList<V> sort(final Comparator<V> comparator);
+    void sort(final Comparator<V> comparator);
 
     int binarySearch(final V val);
 
-    default ArrayList<V> sort() {
+    default void sort() {
         throw new UnsupportedOperationException();
     }
 
-    default ArrayList<V> reverseSort(final Comparator<V> comparator) {
+    default void reverseSort(final Comparator<V> comparator) {
         throw new UnsupportedOperationException();
     }
 
-    default ArrayList<V> reverseSort() {
+    default void reverseSort() {
         throw new UnsupportedOperationException();
     }
 
@@ -93,13 +93,13 @@ public interface ArrayList<V> extends List<V> {
             }
 
             @Override
-            public ArrayList<V> trimToSize() {
-                return null;
+            public void trimToSize() {
+
             }
 
             @Override
-            public ArrayList<V> sort(Comparator<V> comparator) {
-                return null;
+            public void sort(Comparator<V> comparator) {
+
             }
 
             @Override
