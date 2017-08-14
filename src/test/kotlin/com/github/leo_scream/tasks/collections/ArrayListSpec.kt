@@ -8,6 +8,7 @@ import org.jetbrains.spek.api.dsl.context
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
+import org.jetbrains.spek.data_driven.Data3
 import org.jetbrains.spek.data_driven.data
 import org.jetbrains.spek.data_driven.on
 import kotlin.test.assertEquals
@@ -20,9 +21,20 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
 
     describe("array list") {
         val strings = arrayOf("a", "b", "c")
+        val dataWithSortingOrder: Array<Data3<String, String, (String, String) -> Int, String>> = arrayOf(
+                data("6, 5, 4, 3, 2, 1", "natural", { a, b -> a.compareTo(b) }, expected = "sorted array"),
+                data("1, 2, 3, 4, 5, 6", "natural", { a, b -> a.compareTo(b) }, expected = "sorted array"),
+                data("4, 3, 4, 3, 3, 4", "natural", { a, b -> a.compareTo(b) }, expected = "sorted array"),
+                data("6, 5, 4, 3, 2, 1", "reverse", { a, b -> b.compareTo(a) }, expected = "sorted array"),
+                data("1, 2, 3, 4, 5, 6", "reverse", { a, b -> b.compareTo(a) }, expected = "sorted array"),
+                data("4, 3, 4, 3, 3, 4", "reverse", { a, b -> b.compareTo(a) }, expected = "sorted array"),
+                data("6, 5, 4, 3, 2, 1", "custom", { a, b -> a.toInt().compareTo(b.toInt() - 3) }, expected = "sorted array"),
+                data("1, 2, 3, 4, 5, 6", "custom", { a, b -> a.toInt().compareTo(b.toInt() - 3) }, expected = "sorted array"),
+                data("4, 3, 4, 3, 3, 4", "custom", { a, b -> a.toInt().compareTo(b.toInt() - 3) }, expected = "sorted array")
+        )
 
-        beforeEachTest { strings.forEach { subject.add(it) } }
-        afterEachTest { subject.clear() }
+        beforeEachTest { strings.forEach(subject::add) }
+        afterEachTest(subject::clear)
 
         on("getting the capacity") {
             val capacity = subject.capacity
@@ -40,29 +52,29 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
             }
         }
 
-        context("unsorted array list") {
+        context("empty array list") {
+            subject.clear()
 
-            on("sorting %s",
-                    data("6, 5, 4, 3, 2, 1", expected = "sorted array"),
-                    data("1, 2, 3, 4, 5, 6", expected = "sorted array"),
-                    data("4, 3, 4, 3, 3, 4", expected = "sorted array"))
-            { stringArray, _ ->
+            on("sorting %s in %s order",
+                    *dataWithSortingOrder)
+            { stringArray, orderingName, comparator, _ ->
                 val array = stringArray.split(", ")
                 array.forEach(subject::add)
-                subject.sort()
+                subject.sort(comparator)
 
                 it("should be the same size") {
                     assertEquals(array.size, subject.size())
                 }
 
-                it("should be sorted") {
-                    var curVal = Int.MIN_VALUE.toString()
+                it("should be sorted in $orderingName") {
+                    var curVal = subject.get(0)
                     subject.forEach { value ->
-                        assertTrue { value >= curVal }
+                        assertTrue { comparator(value, curVal) >= 0 }
                         curVal = value
                     }
                 }
             }
         }
+
     }
 })
