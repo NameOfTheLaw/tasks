@@ -11,6 +11,7 @@ import org.jetbrains.spek.api.dsl.on
 import org.jetbrains.spek.data_driven.Data3
 import org.jetbrains.spek.data_driven.data
 import org.jetbrains.spek.data_driven.on
+import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -21,7 +22,7 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
 
     describe("array list") {
         val strings = arrayOf("a", "b", "c")
-        val dataWithSortingOrder: Array<Data3<String, String, (String, String) -> Int, String>> = arrayOf(
+        val dataForSorting: Array<Data3<String, String, (String, String) -> Int, String>> = arrayOf(
                 data("6, 5, 4, 3, 2, 1", "natural", { a, b -> a.compareTo(b) }, expected = "sorted array"),
                 data("1, 2, 3, 4, 5, 6", "natural", { a, b -> a.compareTo(b) }, expected = "sorted array"),
                 data("4, 3, 4, 3, 3, 4", "natural", { a, b -> a.compareTo(b) }, expected = "sorted array"),
@@ -31,6 +32,13 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
                 data("6, 5, 4, 3, 2, 1", "custom", { a, b -> a.toInt().compareTo(b.toInt() - 3) }, expected = "sorted array"),
                 data("1, 2, 3, 4, 5, 6", "custom", { a, b -> a.toInt().compareTo(b.toInt() - 3) }, expected = "sorted array"),
                 data("4, 3, 4, 3, 3, 4", "custom", { a, b -> a.toInt().compareTo(b.toInt() - 3) }, expected = "sorted array")
+        )
+        val dataForBinarySearch = arrayOf(
+                data("a", expected = 0),
+                data("b", expected = 1),
+                data("c", expected = 2),
+                data("d", expected = 3),
+                data("e", expected = 4)
         )
 
         beforeEachTest { strings.forEach(subject::add) }
@@ -52,26 +60,36 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
             }
         }
 
-        context("empty array list") {
+        on("sorting %s in %s order",
+                *dataForSorting)
+        { stringArray, orderingName, comparator, _ ->
             subject.clear()
 
-            on("sorting %s in %s order",
-                    *dataWithSortingOrder)
-            { stringArray, orderingName, comparator, _ ->
-                val array = stringArray.split(", ")
-                array.forEach(subject::add)
-                subject.sort(comparator)
+            val array = stringArray.split(", ")
+            array.forEach(subject::add)
+            subject.sort(comparator)
 
-                it("should be the same size") {
-                    assertEquals(array.size, subject.size())
+            it("should be the same size") {
+                assertEquals(array.size, subject.size())
+            }
+
+            it("should be sorted in $orderingName") {
+                var curVal = subject.get(0)
+                subject.forEach { value ->
+                    assertTrue { comparator(value, curVal) >= 0 }
+                    curVal = value
                 }
+            }
+        }
 
-                it("should be sorted in $orderingName") {
-                    var curVal = subject.get(0)
-                    subject.forEach { value ->
-                        assertTrue { comparator(value, curVal) >= 0 }
-                        curVal = value
-                    }
+        context("sorted array list") {
+            val sortedLetters = arrayOf("a", "b", "c", "d", "e")
+            sortedLetters.forEach(subject::add)
+
+            on("binary search letter %s in ${Arrays.toString(sortedLetters)}",
+                    *dataForBinarySearch) { letter, expected ->
+                it("should return $expected") {
+                    assertEquals(expected, subject.binarySearch(letter))
                 }
             }
         }
