@@ -48,7 +48,10 @@ dependencies {
     testCompile group: "org.jetbrains.kotlin", name: "kotlin-reflect",             version: "$kotlinVersion"
     testCompile group: "org.jetbrains.kotlin", name: "kotlin-test",                version: "$kotlinVersion"
     testCompile group: "org.jetbrains.spek",   name: "spek-api",                   version: "$spekVersion"
+    testCompile group: "org.jetbrains.spek",   name: "spek-subject-extension",     version: "$spekVersion"
+    testCompile group: "org.jetbrains.spek",   name: "spek-data-driven-extension", version: "$spekVersion"
     testCompile group: "org.jetbrains.spek",   name: "spek-junit-platform-engine", version: "$spekVersion"
+    testCompile group: "org.mockito",          name: "mockito-core",               version: "$mockitoVersion"
 }
 
 def submittedTasks() {
