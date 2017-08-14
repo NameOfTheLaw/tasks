@@ -71,7 +71,7 @@ object ListSpec : SubjectSpek<List<String>>({
                     data(2, expected = arrayOf("a", "b"))) { index, expected ->
                 subject.remove(index)
 
-                it("should reduce size of the collection") {
+                it("should reduce collection size to ${expected.size}") {
                     assertEquals(expected.size, subject.size())
                 }
 

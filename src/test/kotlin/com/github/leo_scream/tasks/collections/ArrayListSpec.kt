@@ -4,9 +4,7 @@ import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.itBehavesLike
 
 import com.github.leo_scream.tasks.collections.ListSpec
-import org.jetbrains.spek.api.dsl.context
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.*
 import org.jetbrains.spek.api.dsl.on
 import org.jetbrains.spek.data_driven.Data3
 import org.jetbrains.spek.data_driven.data
@@ -60,7 +58,7 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
             }
         }
 
-        on("sorting %s in %s order",
+        on("sorting list of [%s] in %s order",
                 *dataForSorting)
         { stringArray, orderingName, comparator, _ ->
             subject.clear()
@@ -69,7 +67,7 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
             array.forEach(subject::add)
             subject.sort(comparator)
 
-            it("should be the same size") {
+            it("should be the same size as before") {
                 assertEquals(array.size, subject.size())
             }
 
@@ -82,7 +80,7 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
             }
         }
 
-        context("sorted array list") {
+        given("sorted array list") {
             val sortedLetters = arrayOf("a", "b", "c", "d", "e")
             sortedLetters.forEach(subject::add)
 
