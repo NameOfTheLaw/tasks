@@ -29,6 +29,9 @@ public interface ArrayList<V> extends List<V> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    ArrayList<V> subList(final int from, final int to);
+
     static <V> ArrayList<V> of(final V... items) {
         ArrayList<V> list = new ArrayList<V>() {
 
@@ -83,8 +86,8 @@ public interface ArrayList<V> extends List<V> {
             }
 
             @Override
-            public void subList(int from, int to) {
-
+            public ArrayList<V> subList(int from, int to) {
+                return null;
             }
 
             @Override

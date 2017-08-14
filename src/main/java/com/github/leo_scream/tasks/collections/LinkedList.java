@@ -32,6 +32,9 @@ public interface LinkedList<V> extends List<V> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    LinkedList<V> subList(final int from, final int to);
+
     static <V> LinkedList<V> of (final V... items) {
         LinkedList<V> list = new LinkedList<V>() {
 
@@ -86,8 +89,8 @@ public interface LinkedList<V> extends List<V> {
             }
 
             @Override
-            public void subList(int from, int to) {
-
+            public LinkedList<V> subList(int from, int to) {
+                return null;
             }
 
             @Override

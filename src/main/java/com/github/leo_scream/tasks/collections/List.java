@@ -10,7 +10,7 @@ public interface List<V> extends Collection<V> {
 
     void remove(final int i);
 
-    void subList(final int from, final int to);
+    List<V> subList(final int from, final int to);
 
     @Override
     default void add(final V val) {
