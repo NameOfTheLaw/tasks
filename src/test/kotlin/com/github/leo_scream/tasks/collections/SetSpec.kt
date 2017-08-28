@@ -21,7 +21,7 @@ object SetSpec : SubjectSpek<Set<String>>({
 
         given("set of ${Arrays.toString(strings)}") {
 
-            beforeEachTest { strings.forEach { subject.add(it) } }
+            beforeEachTest { strings.forEach(subject::add) }
             afterEachTest { subject.clear() }
 
             on("union with set of ${Arrays.toString(stringsForOtherSet)}") {
