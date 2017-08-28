@@ -37,13 +37,13 @@ object ListSpec : SubjectSpek<List<String>>({
                 }
             }
 
-            on("getting a sub list where from is out of index") {
+            on("getting a sub list where upper bound is out of index") {
                 it("should throw IndexOutOfBoundsException") {
                     assertFailsWith<IndexOutOfBoundsException> { subject.subList(0, strings.size + 1) }
                 }
             }
 
-            on("getting a sub list where to is out of index") {
+            on("getting a sub list where lower bound is out of index") {
                 it("should throw IndexOutOfBoundsException") {
                     assertFailsWith<IndexOutOfBoundsException> { subject.subList(-1, 0) }
                 }
@@ -87,10 +87,10 @@ object ListSpec : SubjectSpek<List<String>>({
                 }
             }
 
-            on("adding an element %2\$s by index %1\$d",
-                    data(0, "z", expected = arrayOf("z", "a", "b", "c")),
-                    data(1, "y", expected = arrayOf("a", "y", "b", "c")),
-                    data(2, "x", expected = arrayOf("a", "b", "x", "c"))) { index, value, expected ->
+            on("adding an element %s by index %d",
+                    data("z", 0, expected = arrayOf("z", "a", "b", "c")),
+                    data("y", 1, expected = arrayOf("a", "y", "b", "c")),
+                    data("x", 2, expected = arrayOf("a", "b", "x", "c"))) { value, index, expected ->
                 subject.add(index, value)
 
                 it("should expand size") {
@@ -109,10 +109,10 @@ object ListSpec : SubjectSpek<List<String>>({
                 }
             }
 
-            on("setting an element %2\$s by index %1\$d",
-                    data(0, "z", expected = arrayOf("z", "b", "c")),
-                    data(1, "y", expected = arrayOf("a", "y", "c")),
-                    data(2, "x", expected = arrayOf("a", "b", "x"))) { index, value, expected ->
+            on("setting an element %s by index %d",
+                    data("z", 0, expected = arrayOf("z", "b", "c")),
+                    data("y", 1, expected = arrayOf("a", "y", "c")),
+                    data("x", 2, expected = arrayOf("a", "b", "x"))) { value, index, expected ->
                 subject.set(index, value)
 
                 it("should not expand size") {

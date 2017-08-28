@@ -20,16 +20,13 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
 
     describe("array list") {
         val strings = arrayOf("a", "b", "c")
-        val dataForSorting: Array<Data3<String, String, (String, String) -> Int, String>> = arrayOf(
-                data("6, 5, 4, 3, 2, 1", "natural", { a, b -> a.compareTo(b) }, expected = "sorted array"),
-                data("1, 2, 3, 4, 5, 6", "natural", { a, b -> a.compareTo(b) }, expected = "sorted array"),
-                data("4, 3, 4, 3, 3, 4", "natural", { a, b -> a.compareTo(b) }, expected = "sorted array"),
-                data("6, 5, 4, 3, 2, 1", "reverse", { a, b -> b.compareTo(a) }, expected = "sorted array"),
-                data("1, 2, 3, 4, 5, 6", "reverse", { a, b -> b.compareTo(a) }, expected = "sorted array"),
-                data("4, 3, 4, 3, 3, 4", "reverse", { a, b -> b.compareTo(a) }, expected = "sorted array"),
-                data("6, 5, 4, 3, 2, 1", "custom", { a, b -> a.toInt().compareTo(b.toInt() - 3) }, expected = "sorted array"),
-                data("1, 2, 3, 4, 5, 6", "custom", { a, b -> a.toInt().compareTo(b.toInt() - 3) }, expected = "sorted array"),
-                data("4, 3, 4, 3, 3, 4", "custom", { a, b -> a.toInt().compareTo(b.toInt() - 3) }, expected = "sorted array")
+        val dataForSorting: Array<Data3<String, Array<Int>, (String, String) -> Int, Array<Int>>> = arrayOf(
+                data("natural", arrayOf(6, 5, 4, 3, 2, 1), { a, b -> a.compareTo(b) }, expected = arrayOf(1, 2, 3, 4, 5, 6)),
+                data("natural", arrayOf(1, 2, 3, 4, 5, 6), { a, b -> a.compareTo(b) }, expected = arrayOf(1, 2, 3, 4, 5, 6)),
+                data("natural", arrayOf(4, 3, 4, 3, 3, 4), { a, b -> a.compareTo(b) }, expected = arrayOf(3, 3, 3, 4, 4, 4)),
+                data("reverse", arrayOf(6, 5, 4, 3, 2, 1), { a, b -> b.compareTo(a) }, expected = arrayOf(6, 5, 4, 3, 2, 1)),
+                data("reverse", arrayOf(1, 2, 3, 4, 5, 6), { a, b -> b.compareTo(a) }, expected = arrayOf(6, 5, 4, 3, 2, 1)),
+                data("reverse", arrayOf(4, 3, 4, 3, 3, 4), { a, b -> b.compareTo(a) }, expected = arrayOf(4, 4, 4, 3, 3, 3))
         )
         val dataForBinarySearch = arrayOf(
                 data("a", expected = 0),
@@ -58,33 +55,35 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
             }
         }
 
-        on("sorting list of [%s] in %s order",
+        on("sorting in %s order",
                 *dataForSorting)
-        { stringArray, orderingName, comparator, _ ->
+        { ordering, array, comparator, expected ->
             subject.clear()
 
-            val array = stringArray.split(", ")
-            array.forEach(subject::add)
+            array.map(Int::toString)
+                    .forEach(subject::add)
+
             subject.sort(comparator)
 
-            it("should be the same size as before") {
-                assertEquals(array.size, subject.size())
-            }
+            it("should transform ${Arrays.toString(array)} to ${Arrays.toString(expected)}") {
 
-            it("should be sorted in $orderingName") {
-                var curVal = subject.get(0)
-                subject.forEach { value ->
-                    assertTrue { comparator(value, curVal) >= 0 }
-                    curVal = value
+                it("should be the same size as before") {
+                    assertEquals(array.size, subject.size())
                 }
+
+                expected.map(Int::toString)
+                        .forEachIndexed { i, expectedValue ->
+                            assertTrue { expectedValue.equals(subject.get(i)) }
+                        }
             }
         }
 
-        given("sorted array list") {
-            val sortedLetters = arrayOf("a", "b", "c", "d", "e")
+        val sortedLetters = arrayOf("a", "b", "c", "d", "e")
+
+        given("sorted array list ${Arrays.toString(sortedLetters)}") {
             sortedLetters.forEach(subject::add)
 
-            on("binary search letter %s in ${Arrays.toString(sortedLetters)}",
+            on("binary search %s",
                     *dataForBinarySearch) { letter, expected ->
                 it("should return $expected") {
                     assertEquals(expected, subject.binarySearch(letter))
