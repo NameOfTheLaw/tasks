@@ -1,7 +1,5 @@
 package com.github.leo_scream.tasks.collections;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Predicate;
@@ -28,7 +26,7 @@ public interface LinkedList<V> extends List<V> {
         throw new UnsupportedOperationException();
     }
 
-    default void reverse() {
+    default LinkedList<V> reverse() {
         throw new UnsupportedOperationException();
     }
 
