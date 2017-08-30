@@ -26,13 +26,13 @@ object CollectionSpec : SubjectSpek<Collection<String>>({
                 }
             }
 
-            on("contains any value") {
+            on("contains") {
                 it("should return false") {
-                    assertFalse(subject.contains("value"))
+                    assertFalse(subject.contains("whatever"))
                 }
             }
 
-            on("addition 1 element") {
+            on("addition") {
                 val value = "value"
                 subject.add(value)
 
@@ -55,24 +55,57 @@ object CollectionSpec : SubjectSpek<Collection<String>>({
             beforeEachTest { strings.forEach(subject::add) }
             afterEachTest(subject::clear)
 
-            on("removing element which is not presented in the collection") {
-                subject.remove("nonExistingValue")
+            on("contains its values") {
+                it("should return true") {
+                    strings.forEach { assertTrue(subject.contains(it)) }
+                }
+            }
+
+            on("removing element that is not presented in the collection") {
+                subject.remove("whatever")
 
                 it("should not change the collection size") {
                     assertEquals(strings.size, subject.size())
                 }
-
             }
 
-            on("removing element which is presented in the collection") {
-                subject.remove("a")
 
-                it("should reduce the collection size by 1") {
+            val removedElement = strings[0]
+            on("removing element that is presented in the collection: '$removedElement'") {
+                subject.remove(removedElement)
+
+                it("should reduce collection size by 1") {
                     assertEquals(strings.size-1, subject.size())
                 }
 
+                it("should remove '$removedElement' from collection") {
+                    assertFalse(subject.contains(removedElement))
+                }
             }
 
+            on("removing by predicate") {
+                val predicate: (String) -> Boolean = { it.equals(strings[0]) || it.equals(strings[1]) }
+                subject.removeIf(predicate)
+
+                it("should remove elements that satisfy the predicate") {
+                    strings.forEach {
+                        if (predicate(it)) assertFalse { subject.contains(it) }
+                        else assertTrue { subject.contains(it) }
+                    }
+                }
+            }
+
+            on("retaining by predicate") {
+                val predicate: (String) -> Boolean = { it.equals(strings[0]) || it.equals(strings[1]) }
+                subject.retainIf(predicate)
+
+                it("should pass only elements that satisfy the predicate") {
+                    strings.forEach {
+                        if (predicate(it)) assertTrue { subject.contains(it) }
+                        else assertFalse { subject.contains(it) }
+                    }
+                }
+            }
         }
 
         on("addition null value") {
