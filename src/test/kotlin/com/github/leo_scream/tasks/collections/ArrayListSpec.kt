@@ -20,13 +20,18 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
 
     describe("array list") {
         val strings = arrayOf("a", "b", "c")
-        val dataForSorting: Array<Data3<String, Array<Int>, (String, String) -> Int, Array<Int>>> = arrayOf(
+        val dataForSortingWithComparator: Array<Data3<String, Array<Int>, (String, String) -> Int, Array<Int>>> = arrayOf(
                 data("natural", arrayOf(6, 5, 4, 3, 2, 1), { a, b -> a.compareTo(b) }, expected = arrayOf(1, 2, 3, 4, 5, 6)),
                 data("natural", arrayOf(1, 2, 3, 4, 5, 6), { a, b -> a.compareTo(b) }, expected = arrayOf(1, 2, 3, 4, 5, 6)),
                 data("natural", arrayOf(4, 3, 4, 3, 3, 4), { a, b -> a.compareTo(b) }, expected = arrayOf(3, 3, 3, 4, 4, 4)),
                 data("reverse", arrayOf(6, 5, 4, 3, 2, 1), { a, b -> b.compareTo(a) }, expected = arrayOf(6, 5, 4, 3, 2, 1)),
                 data("reverse", arrayOf(1, 2, 3, 4, 5, 6), { a, b -> b.compareTo(a) }, expected = arrayOf(6, 5, 4, 3, 2, 1)),
                 data("reverse", arrayOf(4, 3, 4, 3, 3, 4), { a, b -> b.compareTo(a) }, expected = arrayOf(4, 4, 4, 3, 3, 3))
+        )
+        val dataForSorting = arrayOf(
+                data(arrayOf(1, 2, 3, 4, 5, 6), expected = arrayOf(1, 2, 3, 4, 5, 6)),
+                data(arrayOf(6, 5, 4, 3, 2, 1), expected = arrayOf(1, 2, 3, 4, 5, 6)),
+                data(arrayOf(4, 3, 4, 3, 3, 4), expected = arrayOf(3, 3, 3, 4, 4, 4))
         )
         val dataForBinarySearch = arrayOf(
                 data("a", expected = 0),
@@ -36,8 +41,7 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
                 data("e", expected = 4)
         )
 
-        beforeEachTest { strings.forEach(subject::add) }
-        afterEachTest(subject::clear)
+        beforeEachTest(subject::clear)
 
         on("getting the capacity") {
             val capacity = subject.capacity
@@ -55,23 +59,60 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
             }
         }
 
-        on("sorting in %s order",
-                *dataForSorting)
-        { ordering, array, comparator, expected ->
-            subject.clear()
-
+        on("sorting in %s order with method `sort(comparator)`", *dataForSortingWithComparator)
+        { _, array, comparator, expected ->
             array.map(Int::toString)
                     .forEach(subject::add)
 
             subject.sort(comparator)
 
             it("should transform ${Arrays.toString(array)} to ${Arrays.toString(expected)}") {
-
-                it("should be the same size as before") {
-                    assertEquals(array.size, subject.size())
-                }
-
                 expected.map(Int::toString)
+                        .forEachIndexed { i, expectedValue ->
+                            assertTrue { expectedValue.equals(subject.get(i)) }
+                        }
+            }
+        }
+
+        on("sorting in %s order with method `reverseSort(comparator)`", *dataForSortingWithComparator)
+        { _, array, comparator, expected ->
+            array.map(Int::toString)
+                    .forEach(subject::add)
+
+            subject.reverseSort(comparator)
+
+            it("should transform ${Arrays.toString(array)} to ${Arrays.toString(expected)}") {
+                expected.reversedArray()
+                        .map(Int::toString)
+                        .forEachIndexed { i, expectedValue ->
+                            assertTrue { expectedValue.equals(subject.get(i)) }
+                        }
+            }
+        }
+
+        on("sorting with method `sort()`", *dataForSorting) { array, expected ->
+            array.map(Int::toString)
+                    .forEach(subject::add)
+
+            subject.sort()
+
+            it("should transform ${Arrays.toString(array)} to ${Arrays.toString(expected)}") {
+                expected.map(Int::toString)
+                        .forEachIndexed { i, expectedValue ->
+                            assertTrue { expectedValue.equals(subject.get(i)) }
+                        }
+            }
+        }
+
+        on("sorting with method `reverseSort()`", *dataForSorting) { array, expected ->
+            array.map(Int::toString)
+                    .forEach(subject::add)
+
+            subject.reverseSort()
+
+            it("should transform ${Arrays.toString(array)} to ${Arrays.toString(expected)}") {
+                expected.reversedArray()
+                        .map(Int::toString)
                         .forEachIndexed { i, expectedValue ->
                             assertTrue { expectedValue.equals(subject.get(i)) }
                         }
@@ -81,10 +122,9 @@ object ArrayListSpec : SubjectSpek<ArrayList<String>>({
         val sortedLetters = arrayOf("a", "b", "c", "d", "e")
 
         given("sorted array list ${Arrays.toString(sortedLetters)}") {
-            sortedLetters.forEach(subject::add)
+            beforeEachTest { sortedLetters.forEach(subject::add) }
 
-            on("binary search %s",
-                    *dataForBinarySearch) { letter, expected ->
+            on("binary search %s", *dataForBinarySearch) { letter, expected ->
                 it("should return $expected") {
                     assertEquals(expected, subject.binarySearch(letter))
                 }
