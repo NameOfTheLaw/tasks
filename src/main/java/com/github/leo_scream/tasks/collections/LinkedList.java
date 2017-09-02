@@ -1,7 +1,7 @@
 package com.github.leo_scream.tasks.collections;
 
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public interface LinkedList<V> extends List<V> {
@@ -34,11 +34,11 @@ public interface LinkedList<V> extends List<V> {
     LinkedList<V> subList(final int from, final int to);
 
     static <V> LinkedList<V> of (final V... items) {
-        LinkedList<V> list = new LinkedList<V>() {
+        final LinkedList<V> list = new LinkedList<V>() {
 
             @Override
-            public Iterator<V> iterator() {
-                return null;
+            public void forEach(Consumer<V> consumer) {
+
             }
 
             @Override

@@ -1,8 +1,11 @@
 package com.github.leo_scream.tasks.collections;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public interface Collection<V> extends Iterable<V> {
+public interface Collection<V> {
+
+    void forEach(Consumer<V> consumer);
 
     int size();
 

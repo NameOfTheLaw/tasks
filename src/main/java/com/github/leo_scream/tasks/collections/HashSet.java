@@ -1,9 +1,7 @@
 package com.github.leo_scream.tasks.collections;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public interface HashSet<V> extends Set<V> {
@@ -14,6 +12,12 @@ public interface HashSet<V> extends Set<V> {
 
     static <V> HashSet<V> of(final V... items) {
         final HashSet<V> set = new HashSet<V>() {
+
+            @Override
+            public void forEach(Consumer<V> consumer) {
+
+            }
+
             @Override
             public int getCapacity() {
                 return 0;
@@ -52,11 +56,6 @@ public interface HashSet<V> extends Set<V> {
             @Override
             public void removeIf(Predicate<V> p) {
 
-            }
-
-            @Override
-            public Iterator<V> iterator() {
-                return null;
             }
         };
 

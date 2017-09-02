@@ -2,7 +2,7 @@ package com.github.leo_scream.tasks.collections;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public interface ArrayList<V> extends List<V> {
@@ -31,11 +31,11 @@ public interface ArrayList<V> extends List<V> {
     ArrayList<V> subList(final int from, final int to);
 
     static <V> ArrayList<V> of(final V... items) {
-        ArrayList<V> list = new ArrayList<V>() {
+        final ArrayList<V> list = new ArrayList<V>() {
 
             @Override
-            public Iterator<V> iterator() {
-                return null;
+            public void forEach(Consumer<V> consumer) {
+
             }
 
             @Override
