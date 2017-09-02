@@ -20,22 +20,24 @@ public interface Collection<V> {
     void removeIf(final Predicate<V> p);
 
     default void addAll(final Collection<V> c) {
-        throw new UnsupportedOperationException();
+        c.forEach(this::add);
     }
 
     default boolean isEmpty() {
-        throw new UnsupportedOperationException();
+        return size() == 0;
     }
 
     default boolean containsAll(final Collection<V> c) {
-        throw new UnsupportedOperationException();
+        boolean[] contains = {true};
+        c.forEach(v -> contains[0] = this.contains(v));
+        return contains[0];
     }
 
     default void removeAll(final Collection<V> c) {
-        throw new UnsupportedOperationException();
+        c.forEach(this::remove);
     }
 
     default void retainIf(final Predicate<V> p) {
-        throw new UnsupportedOperationException();
+        removeIf(p.negate());
     }
 }

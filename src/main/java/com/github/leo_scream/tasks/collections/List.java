@@ -14,6 +14,6 @@ public interface List<V> extends Collection<V> {
 
     @Override
     default void add(final V val) {
-        throw new UnsupportedOperationException();
+        add(size(), val);
     }
 }
