@@ -1,11 +1,13 @@
 package com.github.leo_scream.tasks.collections
 
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.doAnswer
+import com.nhaarman.mockito_kotlin.mock
 import org.jetbrains.spek.api.dsl.*
 import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.itBehavesLike
-import org.mockito.Mockito
-import org.mockito.Mockito.`when`
 import java.util.*
+import java.util.function.Consumer
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -15,9 +17,21 @@ object SetSpec : SubjectSpek<Set<String>>({
     itBehavesLike(CollectionSpec)
 
     describe("set") {
+
+        fun getSetMock(array: Array<String>): Set<String> =
+                mock { set ->
+                    onGeneric { set.forEach(any()) } doAnswer { invocationOnMock ->
+                        val consumer = invocationOnMock.arguments.get(0) as Consumer<String>
+                        array.forEach { consumer.accept(it) }
+                    }
+
+                    onGeneric { set.contains(any()) } doAnswer { invocationOnMock ->
+                        array.contains(invocationOnMock.arguments.get(0))
+                    }
+                }
         val strings = arrayOf("a", "b", "c")
         val stringsForOtherSet = arrayOf("b", "c", "d")
-        val otherSet = Mockito.mock(Set::class.java) { strings.contains(it.getArgument(0)) } as Set<String>
+        val otherSet = getSetMock(stringsForOtherSet)
 
         given("set of ${Arrays.toString(strings)}") {
 
@@ -75,4 +89,3 @@ object SetSpec : SubjectSpek<Set<String>>({
 
     }
 })
-
