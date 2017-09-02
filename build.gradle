@@ -51,7 +51,7 @@ dependencies {
     testCompile group: "org.jetbrains.spek",   name: "spek-subject-extension",     version: "$spekVersion"
     testCompile group: "org.jetbrains.spek",   name: "spek-data-driven-extension", version: "$spekVersion"
     testCompile group: "org.jetbrains.spek",   name: "spek-junit-platform-engine", version: "$spekVersion"
-    testCompile "com.nhaarman:mockito-kotlin:+"
+    testCompile group: "com.nhaarman",         name: "mockito-kotlin",             version: "$mockitoVersion"
 }
 
 def submittedTasks() {
