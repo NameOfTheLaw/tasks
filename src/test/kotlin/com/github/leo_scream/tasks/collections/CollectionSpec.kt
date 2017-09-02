@@ -64,7 +64,7 @@ object CollectionSpec : SubjectSpek<Collection<String>>({
 
                 it("should have the size of 1") { assertEquals(1, subject.size()) }
 
-                it("should not be empty") { assertTrue(subject.isEmpty) }
+                it("should not be empty") { assertFalse(subject.isEmpty) }
             }
         }
 
@@ -178,6 +178,24 @@ object CollectionSpec : SubjectSpek<Collection<String>>({
         on("addition null value") {
             it("should throw NullPointerException") {
                 assertFailsWith<NullPointerException> { subject.add(null) }
+            }
+        }
+
+        on("removing null value") {
+            it("should throw NullPointerException") {
+                assertFailsWith<NullPointerException> { subject.remove(null) }
+            }
+        }
+
+        on("contains null value") {
+            it("should throw NullPointerException") {
+                assertFailsWith<NullPointerException> { subject.contains(null) }
+            }
+        }
+
+        on("removing by predicate") {
+            it("should throw NullPointerException") {
+                assertFailsWith<NullPointerException> { subject.removeIf(null) }
             }
         }
     }

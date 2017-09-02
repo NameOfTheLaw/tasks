@@ -10,6 +10,7 @@ import org.jetbrains.spek.data_driven.data
 import org.jetbrains.spek.data_driven.on
 import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.itBehavesLike
+import java.lang.NullPointerException
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
@@ -26,7 +27,7 @@ object ListSpec : SubjectSpek<List<String>>({
         given("list of several elements ${Arrays.toString(strings)}") {
 
             on("getting a sub list from %d to %d",
-                    data(0, 3, expected = strings.copyOfRange(0, 3)),
+                    data(0, 2, expected = strings.copyOfRange(0, 2)),
                     data(1, 2, expected = strings.copyOfRange(1, 2)),
                     data(0, 0, expected = strings.copyOfRange(0, 0)),
                     data(0, 1, expected = strings.copyOfRange(0, 1))) { from, to, expected ->
@@ -129,6 +130,12 @@ object ListSpec : SubjectSpek<List<String>>({
                     assertFailsWith<IndexOutOfBoundsException> { subject.set(-1, "x") }
                     assertFailsWith<IndexOutOfBoundsException> { subject.set(subject.size() + 1, "x") }
                 }
+            }
+        }
+
+        on("setting null value") {
+            it("should throw NullPointerException") {
+                assertFailsWith<NullPointerException> { subject.set(0, null) }
             }
         }
     }
