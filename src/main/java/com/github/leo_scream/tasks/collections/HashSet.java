@@ -6,9 +6,7 @@ import java.util.function.Predicate;
 
 public interface HashSet<V> extends Set<V> {
 
-    int getCapacity();
-
-    void trimToSize();
+    double getLoadFactor();
 
     static <V> HashSet<V> of(final V... items) {
         final HashSet<V> set = new HashSet<V>() {
@@ -19,17 +17,12 @@ public interface HashSet<V> extends Set<V> {
             }
 
             @Override
-            public int getCapacity() {
+            public int size() {
                 return 0;
             }
 
             @Override
-            public void trimToSize() {
-
-            }
-
-            @Override
-            public int size() {
+            public double getLoadFactor() {
                 return 0;
             }
 

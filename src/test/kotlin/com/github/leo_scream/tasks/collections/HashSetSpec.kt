@@ -6,7 +6,6 @@ import org.jetbrains.spek.api.dsl.on
 import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.itBehavesLike
 import java.util.*
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 object HashSetSpec : SubjectSpek<HashSet<String>>({
@@ -16,23 +15,16 @@ object HashSetSpec : SubjectSpek<HashSet<String>>({
 
     describe("hash set") {
         val strings = arrayOf("a", "b", "c")
+        val defaultLoadFactor = 0.75
 
         beforeEachTest { strings.forEach(subject::add) }
 
-        on("getting the capacity") {
-            val capacity = subject.capacity
-
-            it("it should be more or equals to size") {
-                assertTrue(capacity >= strings.size)
+        on("getting the set ${Arrays.toString(strings)} load factor") {
+            it("it should be between 0 and $defaultLoadFactor") {
+                assertTrue(subject.loadFactor > 0)
+                assertTrue(subject.loadFactor < defaultLoadFactor)
             }
         }
 
-        on("trimming to size") {
-            subject.trimToSize()
-
-            it("should reduce capacity to size") {
-                assertEquals(strings.size, subject.size())
-            }
-        }
     }
 })
